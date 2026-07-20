@@ -11,11 +11,12 @@ pipeline {
                echo 'Running tests'
             }
         }
+    }   
     post {
         success {
             echo 'Pipelines succeeded'
         }
   
     }
-  }
+  
 }
