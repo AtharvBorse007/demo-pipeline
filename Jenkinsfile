@@ -1,42 +1,33 @@
 pipeline {
     agent any
 
-    parameters {
-        choice(
-            name: 'ENVIRONMENT',
-            choices: ['staging', 'production'],
-            description: 'Select deployment environment'
-        )
-    }
-
     stages {
-
         stage('Build') {
             steps {
-                echo 'Building the application...'
+                echo 'Building...'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests...'
+                echo 'Testing...'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo "Deploying to ${params.ENVIRONMENT} environment..."
+                echo "Deploying from branch: ${env.BRANCH_NAME}"
             }
         }
     }
 
     post {
         success {
-            echo 'Pipeline completed successfully!'
+            echo "Build Successful!"
         }
 
         failure {
-            echo 'Pipeline failed. Please check the logs.'
+            echo "Build Failed!"
         }
     }
 }
