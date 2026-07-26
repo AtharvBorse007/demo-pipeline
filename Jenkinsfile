@@ -1,21 +1,33 @@
 pipeline {
     agent any
+
     stages {
         stage('Build') {
             steps {
-               echo 'Building the project'
+                echo 'Building...'
             }
         }
+
         stage('Test') {
             steps {
-               echo 'Running tests'
+                echo 'Testing...'
             }
         }
+
+        stage('Deploy') {
+            steps {
+                echo "Deploying from branch: ${env.BRANCH_NAME}"
+            }
+        }
+    }
+
     post {
         success {
-            echo 'Pipelines succeeded'
+            echo "Build Successful!"
         }
-  
+
+        failure {
+            echo "Build Failed!"
+        }
     }
-  }
 }
