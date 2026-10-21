@@ -1,10 +1,7 @@
-pipeline {
-  agent any
-  stages {
-    stage('Example') {
-      steps {
-        echo 'Hello'
-      }
-    }
-  }
+agent any
+ 
+agent {
+  label 'windows'
 }
+ 
+agent none
