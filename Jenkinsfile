@@ -1,15 +1,13 @@
 pipeline {
   agent any
-  parameters {
-    choice(name: 'ENVIRONMENT', choices: ['staging', 'production'],description: 'Target')
-  }
   stages {
-    stage('Tests') {
-  parallel {
-    stage('Unit') { steps { bat 'echo Unit tests' } }
-    stage('Integration') { steps { bat 'echo Integration tests' } }
+    stage('Checkout') { steps { checkout scm } }
+    stage('Build')    { steps { bat 'build.bat' } }
+    stage('Test')     { steps { bat 'test.bat' } }
+    stage('Package')  { steps { bat 'package.bat' } }
   }
-}
-   
- }
+  post {
+    success { archiveArtifacts artifacts: 'dist/**', fingerprint: true }
+    failure { echo 'CI pipeline failed' }
+  }
 }
