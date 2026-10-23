@@ -16,20 +16,25 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Deploy using SSH') {
             steps {
-                echo 'Running tests...'
-                bat 'echo Tests passed'
+                sshagent(['deploy-ssh-key']) {
+                    bat 'ssh user@yourserver.com "echo Deployed successfully"'
+                }
             }
         }
 
-        stage('Deploy') {
-            when {
-                branch 'main'
-            }
+        stage('Deploy using Token') {
             steps {
-                echo 'Deploying from main branch...'
-                bat 'echo Deployment successful'
+                withCredentials([
+                    string(
+                        credentialsId: 'deploy-token',
+                        variable: 'TOKEN'
+                    )
+                ]) {
+                    bat 'echo Deploying with a token'
+                    // Add your actual deployment/API command here.
+                }
             }
         }
     }
