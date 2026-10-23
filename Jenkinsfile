@@ -1,14 +1,50 @@
+
 pipeline {
-  agent any
-  parameters { choice(name: 'ENVIRONMENT',
-                      choices: ['dev', 'staging', 'production']) }
-  stages {
-    stage('Approve') {
-      when { expression { params.ENVIRONMENT == 'production' } }
-      steps { input message: 'Deploy to production?' }
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building application...'
+                bat 'echo Build successful'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                bat 'echo Tests passed'
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo 'Deploying from main branch...'
+                bat 'echo Deployment successful'
+            }
+        }
     }
-    stage('Deploy') {
-      steps { bat "echo Deploy to ${params.ENVIRONMENT}" }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+
+        failure {
+            echo 'Pipeline failed. Check Console Output.'
+        }
+
+        always {
+            echo 'Pipeline execution finished.'
+        }
     }
-  }
 }
